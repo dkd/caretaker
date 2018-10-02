@@ -179,10 +179,14 @@ class tx_caretaker_ServiceHelper
             $tests = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', 'tx_caretaker_test', 'deleted=0');
         } else {
             $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_caretaker_test');
+            try {
             $tests = $queryBuilder->select('*')
                 ->from('tx_caretaker_test')
                 ->where($queryBuilder->expr()->eq('deleted', $queryBuilder->createNamedParameter('0')))
                 ->execute();
+            } catch (Exception $exception) {
+
+            }
         }
         if (!empty($tests)) {
             foreach ($tests as $testRecord) {
